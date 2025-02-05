@@ -1,0 +1,25 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!README.md
+!requirements.txt
+!config.py
+!data_loader.py
+!experts.py
+!main.py
+!moe_model.py
+!utils.py
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables and secrets
+.env
+env.example
+
+# OS generated files
+.DS_Store
