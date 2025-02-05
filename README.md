@@ -1,5 +1,7 @@
 # ExpertFusion: A Mixture-of-Experts System for Market Prediction
 
+[![GitHub](https://img.shields.io/badge/GitHub-ExpertFusion-blue?style=flat&logo=github)](https://github.com/DavidZSGao/ExpertFusion)
+
 ExpertFusion leverages the powerful Mixture-of-Experts (MoE) architecture to create a dynamic market prediction system. By employing a neural gating network, it intelligently combines predictions from specialized expert models - each focusing on distinct aspects of market analysis (macro, fundamental, news, technical, and risk). The MoE framework enables the system to adaptively weight expert opinions based on market conditions, leading to more robust and context-aware predictions.
 
 ## Features
