@@ -1,8 +1,22 @@
 # ExpertFusion: A Mixture-of-Experts System for Market Prediction
 
 [![GitHub](https://img.shields.io/badge/GitHub-ExpertFusion-blue?style=flat&logo=github)](https://github.com/DavidZSGao/ExpertFusion)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DavidZSGao/ExpertFusion/blob/main/ExpertFusion.ipynb)
 
 ExpertFusion leverages the powerful Mixture-of-Experts (MoE) architecture to create a dynamic market prediction system. By employing a neural gating network, it intelligently combines predictions from specialized expert models - each focusing on distinct aspects of market analysis (macro, fundamental, news, technical, and risk). The MoE framework enables the system to adaptively weight expert opinions based on market conditions, leading to more robust and context-aware predictions.
+
+## Quick Start
+```bash
+# Clone the repository
+git clone https://github.com/DavidZSGao/ExpertFusion.git
+cd ExpertFusion
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the model
+python main.py
+```
 
 ## Features
 
@@ -68,8 +82,8 @@ MoE/
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd MoE
+   git clone https://github.com/DavidZSGao/ExpertFusion.git
+   cd ExpertFusion
    ```
 
 2. Install dependencies:
