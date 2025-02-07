@@ -64,13 +64,14 @@ class MacroExpert:
             fomc_snippet = fomc_text[:200] if fomc_text else "No FOMC statement"
             sys = (
                 "You are a macro analysis expert. Consider how GDP and monetary policy specifically impact this company:\n"
-                "1. First analyze the company's industry, business model, and macro sensitivities\n"
-                "2. Then evaluate how current GDP and FOMC stance affect this specific business\n"
+                "1. Analyze the company's industry, business model, and macro sensitivities, considering both short and long-term impacts.\n"
+                "2. Evaluate how current GDP and FOMC stance affect this specific business.\n"
                 "3. Consider factors like discretionary vs essential products, consumer financing, interest rates, "
-                "supply chain, global trade, currency exposure and international revenue.\n"
-                "Output a factor between -1 (very negative) and +1 (very positive).\n"
+                "supply chain, global trade, currency exposure, and international revenue.\n"
+                "4. Based on these factors, determine whether the overall macro environment is bullish or bearish for this company.\n"
+                "5. Output a factor between -1 (very negative) and +1 (very positive), reflecting the bullish or bearish nature.\n"
                 "Format => Factor: <float>\n"
-                "Format => Explanation: <text>"
+                "Explanation: <text>"
             )
             usr = f"Company: {ticker}\nGDP={current:.2f} vs {previous:.2f}\nFOMC: {fomc_snippet}"
             fac, _ = call_gpt_factor_and_expl(sys, usr)
@@ -78,7 +79,6 @@ class MacroExpert:
         except Exception as e:
             print(f"[ERROR] MacroExpert failed: {e}")
             raise
-
 
 class FundamentalExpert:
     """Expert for fundamental analysis."""
@@ -89,9 +89,13 @@ class FundamentalExpert:
             pe = fundamentals.get('pe', '')
             roe = fundamentals.get('roe', '')
             sys = (
-                "You are fundamental GPT => factor in [-1,1].\n"
+                "You are an expert in fundamental analysis. Evaluate the company's financial health based on the following:\n"
+                "1. P/E ratio: Is the company undervalued (bullish) or overvalued (bearish)? Consider industry averages and market conditions.\n"
+                "2. ROE: Is the company generating strong returns on equity? Does it indicate a healthy business model?\n"
+                "3. Based on these financial metrics, determine if the stock is bullish or bearish.\n"
+                "Output a factor between -1 (very negative) and +1 (very positive), with an explanation based on the metrics.\n"
                 "Format => Factor: <float>\n"
-                "Format => Explanation: <text>"
+                "Explanation: <text>"
             )
             usr = f"P/E={pe}, ROE={roe}"
             fac, _ = call_gpt_factor_and_expl(sys, usr)
@@ -99,7 +103,6 @@ class FundamentalExpert:
         except Exception as e:
             print(f"[ERROR] FundamentalExpert failed: {e}")
             raise
-
 
 class NewsExpert:
     def produce_factor(self, ticker: str, date: datetime.date) -> float:
@@ -110,9 +113,13 @@ class NewsExpert:
                 return 0.0
             short = "\n".join(headlines[:3])
             sys = (
-                "You are news GPT => factor in [-1,1].\n"
+                "You are an expert in news sentiment analysis. Consider the news headlines for the company and evaluate:\n"
+                "1. Are the headlines generally positive, neutral, or negative in terms of market sentiment?\n"
+                "2. How does the news affect investor sentiment towards the company? Is the news likely to drive the stock price up or down?\n"
+                "3. Based on your analysis, determine whether the overall sentiment is bullish or bearish for the stock.\n"
+                "4. Output a factor between -1 (very negative) and +1 (very positive) reflecting the sentiment.\n"
                 "Format => Factor: <float>\n"
-                "Format => Explanation: <text>"
+                "Explanation: <text>"
             )
             usr = f"{short}"
             fac, _ = call_gpt_factor_and_expl(sys, usr)
@@ -139,8 +146,13 @@ class TechnicalExpert:
             w5 = pct_changes[pos-4:pos+1]
             s = ", ".join(f"{x:.4f}" for x in w5 if not np.isnan(x))
             sys = (
-                "You are technical GPT => factor in [-1,1].\n"
-                "Your output must be exactly two lines: 'Factor: <float>' and 'Explanation: <text>'."
+                "You are an expert in technical analysis. Evaluate the following technical indicators for the stock:\n"
+                "1. How do recent price and volume patterns reflect the overall trend in the market?\n"
+                "2. Is the stock showing bullish or bearish signals based on technical indicators such as moving averages, momentum, or volume trends?\n"
+                "3. Based on this analysis, is the stock in a bullish or bearish trend, and what is your overall sentiment?\n"
+                "Output a factor between -1 (very negative) and +1 (very positive), representing the technical sentiment.\n"
+                "Format => Factor: <float>\n"
+                "Explanation: <text>"
             )
             usr = f"Last5 returns => {s}"
             fac, _ = call_gpt_factor_and_expl(sys, usr)
@@ -148,7 +160,6 @@ class TechnicalExpert:
         except Exception as e:
             print(f"[ERROR] TechnicalExpert failed: {e}")
             raise
-
 
 class RiskExpert:
     def produce_factor(self, df: pd.DataFrame, global_idx: int) -> float:
@@ -159,9 +170,13 @@ class RiskExpert:
             w_5 = rets[global_idx-4:global_idx+1]
             stv = np.nanstd(w_5)
             sys = (
-                "You are risk GPT => if stdev>0.02 => negative.\n"
+                "You are an expert in risk analysis. Evaluate the following risk metrics for the stock:\n"
+                "1. What does the recent volatility and beta tell you about the stock's risk profile?\n"
+                "2. Is the stock showing signs of higher volatility (bearish) or stability (bullish)? Consider if the risk is manageable or excessive.\n"
+                "3. Based on these risk factors, do you consider the stock to be a higher or lower risk, and how does this affect its bullish or bearish nature?\n"
+                "4. Output a factor between -1 (very negative) and +1 (very positive), reflecting the risk sentiment.\n"
                 "Format => Factor: <float>\n"
-                "Format => Explanation: <text>"
+                "Explanation: <text>"
             )
             usr = f"5-day std dev = {stv:.4f}"
             fac, _ = call_gpt_factor_and_expl(sys, usr)
